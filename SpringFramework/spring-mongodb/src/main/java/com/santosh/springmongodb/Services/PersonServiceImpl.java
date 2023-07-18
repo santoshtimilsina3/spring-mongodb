@@ -30,6 +30,6 @@ public class PersonServiceImpl implements PersonService{
 
     @Override
     public List<Person> getPersonByAge(Integer minAge, Integer maxAge) {
-        return personRepository.
+        return personRepository.findPersonByAgeBetween(minAge, maxAge);
     }
 }

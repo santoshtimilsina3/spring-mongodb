@@ -32,6 +32,6 @@ public class PersonController {
     @GetMapping("/age")
     public List<Person> getPersonByAge(@RequestParam Integer minAge,
                                        @RequestParam Integer maxAge){
-        personService.getPersonByAge(minAge, maxAge);
+       return personService.getPersonByAge(minAge, maxAge);
     }
 }
