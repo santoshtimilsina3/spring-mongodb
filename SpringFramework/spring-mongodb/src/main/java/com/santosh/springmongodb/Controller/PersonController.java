@@ -23,4 +23,15 @@ public class PersonController {
     List<Person> getPersonStartWith(@RequestParam("name")String name){
         return personService.getPersonStartWith(name);
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id){
+        personService.deletePerson(id);
+    }
+
+    @GetMapping("/age")
+    public List<Person> getPersonByAge(@RequestParam Integer minAge,
+                                       @RequestParam Integer maxAge){
+        personService.getPersonByAge(minAge, maxAge);
+    }
 }

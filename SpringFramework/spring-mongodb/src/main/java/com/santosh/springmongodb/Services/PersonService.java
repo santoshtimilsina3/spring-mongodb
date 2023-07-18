@@ -9,4 +9,8 @@ public interface PersonService {
     String save(Person person);
 
     List<Person> getPersonStartWith(String name);
+
+    void deletePerson(String id);
+
+    List<Person> getPersonByAge(Integer minAge, Integer maxAge);
 }
