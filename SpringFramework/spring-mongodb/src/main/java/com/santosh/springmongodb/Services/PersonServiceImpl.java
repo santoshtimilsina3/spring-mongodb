@@ -58,9 +58,14 @@ public class PersonServiceImpl implements PersonService{
             criteria.add(Criteria.where("address.city").is(city));
         }
         if(!criteria.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
+            query.addCriteria(new Criteria().andOperator(criteria.toArray(new Criteria[0]))); //converting list of criteria to arrayList
         }
 
-        return personRepository.search();
+        //mongotemplate to fetchdata in the pagination format
+        Page<Person> people = PageableExecutionUtils.getPage(
+                mongoTemplate.find(query,Person.class
+                ), pageable, ()-> mongoTemplate.count(query.skip(0).limit(0),Person.class)
+        );
+        return people;
     }
 }
