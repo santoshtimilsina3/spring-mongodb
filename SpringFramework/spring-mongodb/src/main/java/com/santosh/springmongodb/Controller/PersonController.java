@@ -3,6 +3,7 @@ package com.santosh.springmongodb.Controller;
 import com.santosh.springmongodb.Services.PersonService;
 import com.santosh.springmongodb.collections.Person;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,4 +53,12 @@ public class PersonController {
         }
 
         }
+
+    @GetMapping("/odlestPerson")
+    public List<Document> getOldestPerson() {
+        return personService.getOldestPersonByCity();
     }
+
+    }
+
+

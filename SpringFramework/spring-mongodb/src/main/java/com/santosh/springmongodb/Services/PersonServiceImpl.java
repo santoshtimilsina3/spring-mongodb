@@ -3,13 +3,20 @@ package com.santosh.springmongodb.Services;
 import com.santosh.springmongodb.Repository.PersonRepository;
 import com.santosh.springmongodb.collections.Person;
 import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.SortOperation;
+import org.springframework.data.mongodb.core.aggregation.UnwindOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,4 +75,18 @@ public class PersonServiceImpl implements PersonService{
         );
         return people;
     }
+
+    @Override
+    public List<Document> getOldestPersonByCity() {
+        UnwindOperation unwindOperation = Aggregation.unwind("address");
+        SortOperation sortOperation = Aggregation.sort(Sort.Direction.DESC,"age");
+        GroupOperation groupOperation = Aggregation
+                .group("address.city")
+                .first(Aggregation.ROOT)
+                .as("oldestPerson");
+        Aggregation aggregation = Aggregation.newAggregation(unwindOperation,sortOperation,groupOperation);
+        List<Document> person = mongoTemplate.aggregate(aggregation,Person.class,Document.class).getMappedResults();
+        return person;
+    }
+
 }
